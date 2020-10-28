@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:flowable="http://flowable.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.flowable.org/processdef">
+  <process id="articleReview" name="A simple process for article review." isExecutable="true">
+    <userTask id="reviewArticle" name="Review the submitted tutorial" flowable:candidateGroups="editors" flowable:formFieldValidation="true"></userTask>
+    <sequenceFlow id="sequenceFlow-372b295a-47b7-4179-968e-6404dfca6520" sourceRef="reviewArticle" targetRef="decision"></sequenceFlow>
+    <exclusiveGateway id="decision"></exclusiveGateway>
+    <sequenceFlow id="sequenceFlow-8da89487-f8f0-454d-bc9e-81b990de9a0e" sourceRef="decision" targetRef="tutorialApproved">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${approved}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="sequenceFlow-1c821e16-16bc-4cb6-9fdc-aac6ebc0a929" sourceRef="decision" targetRef="tutorialRejected">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${!approved}]]></conditionExpression>
+    </sequenceFlow>
+    <serviceTask id="tutorialApproved" name="Publish the approved tutorial." flowable:class="com.dell.wf.PublishArticleService"></serviceTask>
+    <sequenceFlow id="sequenceFlow-34159e90-4057-4a35-bc2b-4b21b75fc9e7" sourceRef="tutorialApproved" targetRef="end"></sequenceFlow>
+    <serviceTask id="tutorialRejected" name="Send out rejection email" flowable:class="com.dell.wf.SendMailService"></serviceTask>
+    <sequenceFlow id="sequenceFlow-2d5995f8-48af-46de-a721-cf196888bff8" sourceRef="tutorialRejected" targetRef="end"></sequenceFlow>
+    <endEvent id="end"></endEvent>
+    <startEvent id="incomingMessage">
+      <extensionElements>
+        <flowable:eventType xmlns:flowable="http://flowable.org/bpmn"><![CDATA[incomingMessageEvent]]></flowable:eventType>
+        <flowable:eventOutParameter xmlns:flowable="http://flowable.org/bpmn" source="id" sourceType="string" target="id"></flowable:eventOutParameter>
+        <flowable:eventOutParameter xmlns:flowable="http://flowable.org/bpmn" source="author" sourceType="string" target="author"></flowable:eventOutParameter>
+        <flowable:eventOutParameter xmlns:flowable="http://flowable.org/bpmn" source="url" sourceType="string" target="url"></flowable:eventOutParameter>
+      </extensionElements>
+    </startEvent>
+    <sequenceFlow id="sid-DF4C0A2B-A719-4A19-A740-83A398C6BCE4" sourceRef="incomingMessage" targetRef="reviewArticle"></sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_articleReview">
+    <bpmndi:BPMNPlane bpmnElement="articleReview" id="BPMNPlane_articleReview">
+      <bpmndi:BPMNShape bpmnElement="reviewArticle" id="BPMNShape_reviewArticle">
+        <omgdc:Bounds height="60.0" width="100.0" x="180.0" y="180.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="decision" id="BPMNShape_decision">
+        <omgdc:Bounds height="40.0" width="40.0" x="330.0" y="190.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="tutorialApproved" id="BPMNShape_tutorialApproved">
+        <omgdc:Bounds height="60.0" width="100.0" x="420.0" y="100.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="tutorialRejected" id="BPMNShape_tutorialRejected">
+        <omgdc:Bounds height="60.0" width="100.0" x="420.0" y="260.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="end" id="BPMNShape_end">
+        <omgdc:Bounds height="28.0" width="28.0" x="570.0" y="195.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="incomingMessage" id="BPMNShape_incomingMessage">
+        <omgdc:Bounds height="30.0" width="30.5" x="165.75" y="44.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="sequenceFlow-8da89487-f8f0-454d-bc9e-81b990de9a0e" id="BPMNEdge_sequenceFlow-8da89487-f8f0-454d-bc9e-81b990de9a0e">
+        <omgdi:waypoint x="369.9189252336448" y="210.0"></omgdi:waypoint>
+        <omgdi:waypoint x="382.0" y="210.0"></omgdi:waypoint>
+        <omgdi:waypoint x="382.0" y="130.0"></omgdi:waypoint>
+        <omgdi:waypoint x="419.9999999999769" y="130.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sequenceFlow-1c821e16-16bc-4cb6-9fdc-aac6ebc0a929" id="BPMNEdge_sequenceFlow-1c821e16-16bc-4cb6-9fdc-aac6ebc0a929">
+        <omgdi:waypoint x="369.9189252336448" y="210.0"></omgdi:waypoint>
+        <omgdi:waypoint x="382.0" y="210.0"></omgdi:waypoint>
+        <omgdi:waypoint x="382.0" y="290.0"></omgdi:waypoint>
+        <omgdi:waypoint x="419.9999999999769" y="290.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sequenceFlow-34159e90-4057-4a35-bc2b-4b21b75fc9e7" id="BPMNEdge_sequenceFlow-34159e90-4057-4a35-bc2b-4b21b75fc9e7">
+        <omgdi:waypoint x="519.95" y="130.0"></omgdi:waypoint>
+        <omgdi:waypoint x="532.0" y="130.0"></omgdi:waypoint>
+        <omgdi:waypoint x="532.0" y="210.0"></omgdi:waypoint>
+        <omgdi:waypoint x="570.0025321198765" y="209.2682208256902"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sequenceFlow-2d5995f8-48af-46de-a721-cf196888bff8" id="BPMNEdge_sequenceFlow-2d5995f8-48af-46de-a721-cf196888bff8">
+        <omgdi:waypoint x="519.95" y="290.0"></omgdi:waypoint>
+        <omgdi:waypoint x="532.0" y="290.0"></omgdi:waypoint>
+        <omgdi:waypoint x="532.0" y="210.0"></omgdi:waypoint>
+        <omgdi:waypoint x="570.0025321198765" y="209.2682208256902"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sequenceFlow-372b295a-47b7-4179-968e-6404dfca6520" id="BPMNEdge_sequenceFlow-372b295a-47b7-4179-968e-6404dfca6520">
+        <omgdi:waypoint x="279.95000000000005" y="210.0"></omgdi:waypoint>
+        <omgdi:waypoint x="330.0" y="210.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sid-DF4C0A2B-A719-4A19-A740-83A398C6BCE4" id="BPMNEdge_sid-DF4C0A2B-A719-4A19-A740-83A398C6BCE4">
+        <omgdi:waypoint x="185.62287830195186" y="73.2451057493524"></omgdi:waypoint>
+        <omgdi:waypoint x="220.26490066225165" y="180.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

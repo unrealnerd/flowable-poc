@@ -1,0 +1,12 @@
+{
+  "key": "incomingMessageChannel",
+  "category": "channel",
+  "name": "Incoming Message Channel",
+  "channelType": "inbound",
+  "type": "kafka",
+  "deserializerType": "json",
+  "channelEventKeyDetection": {
+      "fixedValue": "incomingMessageEvent"
+  },
+  "topics":["article"]
+}

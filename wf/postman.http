@@ -1,0 +1,42 @@
+@url = http://localhost:8083
+###
+POST {{url}}/submit
+Content-Type: application/json
+
+{
+  "id": "1",
+  "author": "Sienfeld",
+  "url":"http://articles/showaboutnothing"
+}
+
+###
+POST {{url}}/submit
+Content-Type: application/json
+
+{
+  "id": "2",
+  "author": "Kramer",
+  "url":"http://articles/kosmo"
+}
+
+###
+GET {{url}}/tasks?assignee=editors
+
+###
+
+POST {{url}}/review
+Content-Type: application/json
+
+{
+  "id": "43dee84b-12e3-11eb-9778-10f005ee7a83",
+  "status": true
+}
+
+### Kafka API
+# groupid = test
+
+# ppcm-po-kafka-dev
+# api/addDatatotopic
+# topic
+# request
+# "incomingMessageEvent":{  "id": "1",  "author": "Sienfeld",  "url":"http://articles/showaboutnothing"}

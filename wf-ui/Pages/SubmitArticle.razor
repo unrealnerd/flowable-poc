@@ -1,0 +1,30 @@
+﻿@using wf_ui.Data
+@inject ArticleService ArticleService
+
+<h3>Submit Article</h3>
+
+<input placeholder="Author Name" @bind="Author" />
+<input placeholder="Article URL" @bind="Url" />
+<button @onclick="SubmitArticleForReview">Submit</button>
+
+<input type="text" @bind="Result" />
+<p>Current count: @Result</p>
+
+@code {
+    private string Author;
+    private string Url;
+
+    private string Result;
+
+    private void SubmitArticleForReview()
+    {
+        var result = Task.Run(async () =>
+        {
+            return await ArticleService.SubmitArticleForReview();
+        });
+        Result = result.Result;
+        @* Result = await ArticleService.SubmitArticleForReview(); *@
+        Console.WriteLine($"Result is {Result}");
+    }
+
+}

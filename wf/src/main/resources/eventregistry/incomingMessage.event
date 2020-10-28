@@ -1,0 +1,20 @@
+{
+  "key": "incomingMessageEvent",
+  "name": "Incoming Message",
+  "inboundChannelKeys":["incomingMessageChannel"],
+  "correlationParameters": [],
+  "payload": [
+      {
+        "name": "id",
+        "type": "string"
+      },
+      {
+        "name": "author",
+        "type": "string"
+      },
+      {
+        "name": "url",
+        "type": "string"
+      }
+  ]
+}
