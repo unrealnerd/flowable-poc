@@ -13,6 +13,7 @@
             "args": ["watch"],
             "cwd": "${workspaceFolder}",
             "stopAtEntry": false,
+            "console": "externalTerminal",
             "serverReadyAction": {
                 "action": "openExternally",
                 "pattern": "\\bNow listening on:\\s+(https?://\\S+)"

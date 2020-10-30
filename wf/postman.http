@@ -14,7 +14,6 @@ POST {{url}}/submit
 Content-Type: application/json
 
 {
-  "id": "2",
   "author": "Kramer",
   "url":"http://articles/kosmo"
 }

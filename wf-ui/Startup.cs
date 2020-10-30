@@ -34,6 +34,7 @@ namespace wf_ui
             });
             services.AddSingleton<WeatherForecastService>();
             services.AddTransient<ArticleService>();
+            services.AddSingleton<KafkaService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

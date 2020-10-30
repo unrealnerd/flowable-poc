@@ -1,14 +1,15 @@
 ﻿@using wf_ui.Data
 @inject ArticleService ArticleService
+@inject KafkaService KafkaService
 
 <h3>Submit Article</h3>
-    <div class="form-group">
-        <input placeholder="Author Name" @bind="Author" class="form-control" />
-    </div>
-    <div class="form-group">
-        <input placeholder="Article URL" @bind="Url" class="form-control" />
-    </div>
-    <button @onclick="SubmitArticleForReview" class="btn btn-primary">Submit</button>
+<div class="form-group">
+    <input placeholder="Author Name" @bind="Author" class="form-control" />
+</div>
+<div class="form-group">
+    <input placeholder="Article URL" @bind="Url" class="form-control" />
+</div>
+<button @onclick="SubmitArticleForReview" class="btn btn-primary">Submit</button>
 @if (showMessage)
 {
     <div class="row mt-2">
@@ -21,7 +22,7 @@
 }
 
 <input type="text" @bind="Result" />
-<p>Current count: @Result @showMessage @currentCount</p>
+<p>Current count: @Result @showMessage</p>
 
 @code {
     private string Author;
@@ -39,7 +40,7 @@
         @* Result = await ArticleService.SubmitArticleForReview(); *@
         showMessage = !string.IsNullOrEmpty(Result);
         Console.WriteLine($"Result is {Result}/{showMessage}");
-
+        KafkaService.Send($@"{{ ""author"": ""{Author}"", ""url"":""{Url}""}}");
     }
 
 }
