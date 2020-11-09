@@ -1,4 +1,5 @@
-﻿@using wf_ui.Data
+﻿@page "/"
+@using wf_ui.Data
 @inject ArticleService ArticleService
 @inject KafkaService KafkaService
 
@@ -21,26 +22,23 @@
     </div>
 }
 
-<input type="text" @bind="Result" />
-<p>Current count: @Result @showMessage</p>
 
 @code {
     private string Author;
     private string Url;
     private bool showMessage = false;
-    private string Result;
 
     private void SubmitArticleForReview()
     {
-        var result = Task.Run(async () =>
+        Task.Run(async () =>
         {
-            return await ArticleService.SubmitArticleForReview();
+            await ArticleService.SubmitArticleForReview(new Models.Article { Author = Author, Url = Url });
         });
-        Result = result.Result;
+        @* Result = result.Result; *@
         @* Result = await ArticleService.SubmitArticleForReview(); *@
-        showMessage = !string.IsNullOrEmpty(Result);
-        Console.WriteLine($"Result is {Result}/{showMessage}");
-        KafkaService.Send($@"{{ ""author"": ""{Author}"", ""url"":""{Url}""}}");
+        showMessage = true;
+        @* Console.WriteLine($"Result is {Result}/{showMessage}"); *@
+        @* KafkaService.Send($@"{{ ""author"": ""{Author}"", ""url"":""{Url}""}}"); *@
     }
 
 }

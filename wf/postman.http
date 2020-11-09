@@ -1,5 +1,11 @@
+## Docker Container 
 @url = http://localhost:8083
+
+## Local Developer machine
+# @url = http://localhost:7000
+
 ###
+# @name submitForReview
 POST {{url}}/submit
 Content-Type: application/json
 
@@ -19,6 +25,7 @@ Content-Type: application/json
 }
 
 ###
+# @name getAllAssignedTasks
 GET {{url}}/tasks?assignee=editors
 
 ###
@@ -27,9 +34,18 @@ POST {{url}}/review
 Content-Type: application/json
 
 {
-  "id": "43dee84b-12e3-11eb-9778-10f005ee7a83",
+  "id": "{{getAllAssignedTasks.response.body.$[0].id}}",
   "status": true
 }
+
+###
+GET {{url}}/actuator/flowable
+
+###
+GET {{url}}/history
+
+###
+GET {{url}}/history/servicetasks
 
 ### Kafka API
 # groupid = test

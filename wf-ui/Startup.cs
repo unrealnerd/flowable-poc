@@ -32,9 +32,9 @@ namespace wf_ui
             {
                 c.BaseAddress = new Uri("http://localhost:8083");
             });
-            services.AddSingleton<WeatherForecastService>();
             services.AddTransient<ArticleService>();
             services.AddSingleton<KafkaService>();
+            services.AddTransient<HistoryService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -13,6 +13,7 @@ import org.flowable.engine.RuntimeService;
 import org.flowable.engine.TaskService;
 import org.flowable.task.api.Task;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import java.util.stream.Collectors;
 
@@ -20,31 +21,30 @@ import java.util.stream.Collectors;
 public class ArticleWorkflowService {
     @Autowired
     private RuntimeService runtimeService;
- 
+
     @Autowired
     private TaskService taskService;
- 
+
+    @Value("${wf.processname}")
+    private String processName;
+
     @Transactional
     public void startProcess(Article article) {
         Map<String, Object> variables = new HashMap<>();
         variables.put("author", article.getAuthor());
         variables.put("url", article.getUrl());
-        runtimeService.startProcessInstanceByKey("articleReview", variables);
+        runtimeService.startProcessInstanceByKey(processName, variables);
     }
- 
+
     @Transactional
     public List<Article> getTasks(String assignee) {
-        List<Task> tasks = taskService.createTaskQuery()
-          .taskCandidateGroup(assignee)
-          .list();
-        return tasks.stream()
-          .map(task -> {
-              Map<String, Object> variables = taskService.getVariables(task.getId());
-              return new Article(task.getId(), (String) variables.get("author"), (String) variables.get("url"));
-          })
-          .collect(Collectors.toList());
+        List<Task> tasks = taskService.createTaskQuery().taskCandidateGroup(assignee).list();
+        return tasks.stream().map(task -> {
+            Map<String, Object> variables = taskService.getVariables(task.getId());
+            return new Article(task.getId(), (String) variables.get("author"), (String) variables.get("url"));
+        }).collect(Collectors.toList());
     }
- 
+
     @Transactional
     public void submitReview(Approval approval) {
         Map<String, Object> variables = new HashMap<String, Object>();

@@ -1,0 +1,39 @@
+@page "/tasks"
+@using wf_ui.Data
+@using wf_ui.Models
+
+@inject ArticleService ArticleService
+
+<ul class="list-group">
+    @if (articles != null)
+    {
+        foreach (var item in articles)
+        {
+            <li class="list-group-item d-flex">
+                <p class="flex-grow-1">@($"Author: {item.Author}, URL: {item.Url}")</p>
+                <button class="btn btn-danger" @onclick="@(e=>Approve(item.Id, false))">Reject</button>
+                <button class="ml-1 btn btn-success" @onclick="@(e=>Approve(item.Id, true))">Approve</button>
+            </li>
+        }
+    }
+
+</ul>
+
+@code{
+    private List<Article> articles { get; set; }
+
+
+    protected async override Task OnInitializedAsync()
+    {
+        articles = await ArticleService.GetArticlesForReviewAsync();
+    }
+
+    private void Approve(string id, bool state)
+    {
+        Task.Run(async () =>
+        {
+            await ArticleService.Approve(id, state);
+            articles = articles.Where(x=>x.Id == id).ToList();
+        });
+    }
+}

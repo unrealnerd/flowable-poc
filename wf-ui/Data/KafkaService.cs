@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using Confluent.Kafka;
 
 namespace wf_ui.Data
@@ -16,11 +17,11 @@ namespace wf_ui.Data
             Producer = new ProducerBuilder<Null, string>(config).Build();
         }
 
-        public void Send(string message)
+        public async Task Send(string message)
         {
             try
             {
-                Producer.Produce("article", new Message<Null, string> { Value = message });
+                await Producer.ProduceAsync("article", new Message<Null, string> { Value = message });
             }
             catch (System.Exception ex)
             {
